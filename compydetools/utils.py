@@ -9,6 +9,11 @@ from .core import Page
 
 
 def all_conditions() -> list[Page]:
+    """Get all pages of specified conditions.
+
+    Returns:
+        list[Page]: list of Pages.
+    """
     pages: list[Page] = []
     for simul_data in CONDITION.simul_data:
         for disp_type in CONDITION.disp_type:

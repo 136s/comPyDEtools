@@ -14,6 +14,9 @@ StrPath = str | Path
 
 
 class Enum(OriginalEnum):
+    def __repr__(self) -> str:
+        return str(self)
+
     @classmethod
     @property
     def first(cls):
