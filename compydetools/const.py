@@ -6,7 +6,7 @@ Constant classes
 
 from enum import Enum as OriginalEnum, unique
 from pathlib import Path
-from typing import Any, Self
+from typing import Self
 
 
 # 文字型と Path 型の Union 型
@@ -16,8 +16,8 @@ StrPath = str | Path
 class Enum(OriginalEnum):
     @classmethod
     @property
-    def values(cls) -> list[Any]:
-        return [i.value for i in cls]
+    def first(cls):
+        return list(cls)[0]
 
 
 @unique
@@ -28,16 +28,14 @@ class Simul(Enum):
     mBdK = "mBdK"
 
     @classmethod
-    def ngenes(cls, simul_data: Self | str) -> int:
-        ngenes_dict: dict[Self, int] = {
-            cls.KIRC.value: 10000,
-            cls.Bottomly.value: 5000,
-            cls.mKdB.value: 5000,
-            cls.mBdK.value: 5000,
-        }
-        if not isinstance(simul_data, str):
-            simul_data = simul_data.value
-        return ngenes_dict.get(simul_data)
+    def ngenes(cls, simul_data: Self) -> int:
+        match simul_data:
+            case cls.KIRC:
+                return 10000
+            case cls.Bottomly | cls.mKdB | cls.mBdK:
+                return 5000
+            case _:
+                raise AttributeError
 
 
 @unique

@@ -12,14 +12,14 @@ from .const import Simul, Disp, Outlier, Metrics, Method, Default
 
 @dataclass
 class Result:
-    simul_data: Simul = field(default=Simul.values[0])
-    disp_type: Disp = field(default=Disp.values[0])
+    simul_data: Simul = field(default=Simul.first)
+    disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
     nsample: float = field(default=Default.NSAMPLE[0])
-    outlier_mode: Outlier = field(default=Outlier.values[0])
+    outlier_mode: Outlier = field(default=Outlier.first)
     pde: float = field(default=Default.PDE[0])
-    metrics_type: Metrics = field(default=Metrics.values[0])
-    method_type: Method = field(default=Method.values[0])
+    metrics_type: Metrics = field(default=Metrics.first)
+    method_type: Method = field(default=Method.first)
     nrep: int = field(default=Default.NREP)
     seed: int = field(default=Default.SEED)
     value: float = field(init=False, repr=False)
@@ -27,25 +27,25 @@ class Result:
 
 @dataclass
 class Dataset:
-    simul_data: Simul = field(default=Simul.values[0])
-    disp_type: Disp = field(default=Disp.values[0])
+    simul_data: Simul = field(default=Simul.first)
+    disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
     nsample: float = field(default=Default.NSAMPLE[0])
-    outlier_mode: Outlier = field(default=Outlier.values[0])
+    outlier_mode: Outlier = field(default=Outlier.first)
     pde: float = field(default=Default.PDE[0])
     seed: int = field(default=Default.SEED)
 
 
 @dataclass
 class Box:
-    simul_data: Simul = field(default=Simul.values[0])
-    disp_type: Disp = field(default=Disp.values[0])
+    simul_data: Simul = field(default=Simul.first)
+    disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
     nsample: float = field(default=Default.NSAMPLE[0])
-    outlier_mode: Outlier = field(default=Outlier.values[0])
+    outlier_mode: Outlier = field(default=Outlier.first)
     pde: float = field(default=Default.PDE[0])
-    metrics_type: Metrics = field(default=Metrics.values[0])
-    method_type: Method = field(default=Method.values[0])
+    metrics_type: Metrics = field(default=Metrics.first)
+    method_type: Method = field(default=Method.first)
     nrep: int = field(default=Default.NREP)
     seed: int = field(default=Default.SEED)
     datasets: list[Dataset] = field(default_factory=list, init=False, repr=False)
@@ -67,13 +67,13 @@ class Box:
 
 @dataclass
 class Plot:
-    simul_data: Simul = field(default=Simul.values[0])
-    disp_type: Disp = field(default=Disp.values[0])
+    simul_data: Simul = field(default=Simul.first)
+    disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
     nsample: float = field(default=Default.NSAMPLE[0])
-    outlier_mode: Outlier = field(default=Outlier.values[0])
+    outlier_mode: Outlier = field(default=Outlier.first)
     pde: float = field(default=Default.PDE[0])
-    metrics_type: Metrics = field(default=Metrics.values[0])
+    metrics_type: Metrics = field(default=Metrics.first)
     boxes: list[Box] = field(default_factory=list, init=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -94,11 +94,11 @@ class Plot:
 
 @dataclass
 class Figure:
-    simul_data: Simul = field(default=Simul.values[0])
-    disp_type: Disp = field(default=Disp.values[0])
+    simul_data: Simul = field(default=Simul.first)
+    disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
     nsample: float = field(default=Default.NSAMPLE[0])
-    outlier_mode: Outlier = field(default=Outlier.values[0])
+    outlier_mode: Outlier = field(default=Outlier.first)
     plots: list[Plot] = field(default_factory=list, init=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -118,8 +118,8 @@ class Figure:
 
 @dataclass
 class Page:
-    simul_data: Simul = field(default=Simul.values[0])
-    disp_type: Disp = field(default=Disp.values[0])
+    simul_data: Simul = field(default=Simul.first)
+    disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
     figures: list[Figure] = field(default_factory=list, init=False, repr=False)
 
