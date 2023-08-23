@@ -5,7 +5,12 @@ Constant classes
 """
 
 from enum import Enum as OriginalEnum, unique
+from pathlib import Path
 from typing import Any, Self
+
+
+# 文字型と Path 型の Union 型
+StrPath = str | Path
 
 
 class Enum(OriginalEnum):
@@ -43,29 +48,29 @@ class Disp(Enum):
 
 @unique
 class Outlier(Enum):
-    D = "D"
-    R = "R"
-    OS = "OS"
-    DL = "DL"
+    D = "no random outlier"
+    R = "random outlier test"
+    OS = "outlying dispersion sample contained"
+    DL = "lowered dispersion test"
 
 
 @unique
 class Metrics(Enum):
-    auc = "auc"
-    tpr = "tpr"
-    fdr = "fdr"
-    cutoff = "cutoff"
-    f1score = "f1score"
-    kappa = "kappa"
+    auc = "AUC"
+    tpr = "TPR"
+    fdr = "True FDR"
+    cutoff = "Best threshold"
+    f1score = "F1-score"
+    kappa = "Cohen's kappa"
 
 
 @unique
 class Method(Enum):
-    fc = "fc"
-    nc = "nc"
-    rp = "rp"
-    cp = "cp"
-    deseq2 = "deseq2"
+    fc = "Fold change"
+    nc = "Normalized change"
+    rp = "Rank product"
+    cp = "Combined probability"
+    deseq2 = "DEseq2"
 
 
 class Default:
