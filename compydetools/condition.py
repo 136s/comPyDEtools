@@ -7,34 +7,43 @@ Handle simulation conditions.
 from pathlib import Path
 from pprint import pformat
 
-from hydra import compose, initialize
-from omegaconf import DictConfig
+from hydra import compose, initialize_config_dir
+from omegaconf import DictConfig, OmegaConf
 
-from .const import Simul, Disp, Outlier, Metrics, Method, Default
+from .const import Enum, StrPath, Simul, Disp, Outlier, Metrics, Method, Default
 
+
+CONDTYPE_CALSS: dict[str, Enum] = {
+    "simul_data": Simul,
+    "disp_type": Disp,
+    "outlier_mode": Outlier,
+    "metrics_type": Metrics,
+    "method_type": Method,
+}
 
 CONDITION = DictConfig(
-    {
-        "simul_data": Simul.values,
-        "disp_type": Disp.values,
+    {cond_type: list(enum_class) for cond_type, enum_class in CONDTYPE_CALSS.items()}
+    | {
         "frac_up": Default.FRAC_UP,
         "nsample": Default.NSAMPLE,
-        "outlier_mode": Outlier.values,
         "pde": Default.PDE,
-        "metrics_type": Metrics.values,
-        "method_type": Method.values,
         "nrep": Default.NREP,
     }
 )
 
 
-def set_condition(condition_path: str | Path) -> None:
-    condition_path = Path(condition_path)
+def set_condition(condition_path: StrPath) -> None:
+    condition_path = Path(condition_path).resolve()
     if condition_path.is_file():
         global CONDITION
-        with initialize(
-            version_base=None, config_path=condition_path.parent.as_posix()
+        with initialize_config_dir(
+            version_base=None, config_dir=condition_path.parent.as_posix()
         ):
             overriding = compose(config_name=condition_path.stem)
+            # cast from str to Enum.
+            OmegaConf.set_struct(overriding, False)
+            for cond_type, enum_class in CONDTYPE_CALSS.items():
+                overriding[cond_type] = [enum_class[i] for i in overriding[cond_type]]
+            OmegaConf.set_struct(overriding, True)
         CONDITION.merge_with(overriding)
     print(f"CINDITION: {pformat(dict(CONDITION))}")
