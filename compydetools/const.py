@@ -9,8 +9,10 @@ from pathlib import Path
 from typing import Self
 
 
-# 文字型と Path 型の Union 型
 StrPath = str | Path
+DE_INPUT_DIR = Path("input")
+DE_OUTPUT_DIR = Path("output")
+COMP_RES_DIR = Path("result")
 
 
 class Enum(OriginalEnum):

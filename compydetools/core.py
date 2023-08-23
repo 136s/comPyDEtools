@@ -5,9 +5,21 @@ Simulation core classes
 """
 
 from dataclasses import dataclass, field
+from pathlib import Path
+
+import pandas as pd
 
 from .condition import CONDITION
-from .const import Simul, Disp, Outlier, Metrics, Method, Default
+from .const import (
+    DE_INPUT_DIR,
+    Simul,
+    Disp,
+    Outlier,
+    Metrics,
+    Method,
+    Default,
+)
+from .generation import synthetic_data_simulation
 
 
 @dataclass
@@ -34,6 +46,55 @@ class Dataset:
     outlier_mode: Outlier = field(default=Outlier.first)
     pde: float = field(default=Default.PDE[0])
     seed: int = field(default=Default.SEED)
+    ngenes: int = field(init=False, repr=False)
+    nde: int = field(init=False, repr=False)
+    counts: pd.DataFrame = field(init=False, repr=False)
+    cond_str: str = field(init=False, repr=False)
+    countpath: Path = field(init=False, repr=False)
+    configpath: Path = field(init=False, repr=False)
+
+    def convert_pde(self) -> None:
+        self.ngenes = Simul.ngenes(self.simul_data)
+        self.nde = round(self.ngenes * self.pde / 100)
+
+    def generate(self) -> pd.DataFrame:
+        if not hasattr(self, "counts"):
+            self.convert_pde()
+            self.counts = synthetic_data_simulation(
+                simul_data=self.simul_data,
+                disp_type=self.disp_type,
+                frac_up=self.frac_up,
+                nsample=self.nsample,
+                outlier_mode=self.outlier_mode,
+                ngenes=self.ngenes,
+                nde=self.nde,
+                seed=self.seed,
+            )
+        return self.counts
+
+    def set_path(self):
+        self.cond_str = "_".join(
+            [
+                self.simul_data.name,
+                self.disp_type.name,
+                f"upFrac{self.frac_up}",
+                f"{self.nsample}spc",
+                self.outlier_mode.name,
+                f"{self.nde}DE",
+            ]
+        )
+        self.countpath = DE_INPUT_DIR.joinpath(
+            self.cond_str, f"{self.cond_str}_rep{self.seed}.tsv"
+        )
+        self.configpath = self.countpath.with_suffix(".yaml")
+
+    def save(self):
+        self.generate()
+        self.set_path()
+        self.countpath.parent.mkdir(exist_ok=True, parents=True)
+        self.counts.to_csv(
+            self.countpath, sep="\t", lineterminator="\n", encoding="utf-8"
+        )
 
 
 @dataclass
