@@ -1,0 +1,59 @@
+%YAML 1.2
+---
+# "KIRC", "Bottomly", "mKdB", "mBdK"
+simul_data: !!seq
+  - KIRC
+  - Bottomly
+  - mKdB
+  - mBdK
+
+# "same", "different"
+disp_type: !!seq
+  - same
+  - different
+
+# float 0-1
+frac_up: !!seq
+  - 0.5
+  - 0.7
+  - 0.9
+
+# int 3-
+nsample: !!seq
+  - 3
+  - 10
+
+# "D", "R", "OS", "DL"
+outlier_mode: !!seq
+  - D
+  - R
+  - OS
+  - DL
+
+# float 0-100
+pde: !!seq
+  - 0.27
+  - 5
+  - 10
+  - 30
+  - 60
+
+# "auc", "tpr", "fdr", "cutoff", "f1score", "kappa"
+metrics_type: !!seq
+  - auc
+  - tpr
+  - fdr
+  - cutoff
+  - f1score
+  - kappa
+
+# "fc", "nc", "rp", "cp", "deseq2"
+method_type: !!seq
+  - fc
+  - nc
+  - rp
+  - cp
+  - deseq2
+
+# int 3-
+nrep: !!int 50

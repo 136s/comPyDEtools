@@ -48,6 +48,6 @@ setup(
     version=about.get("__version__"),
     description="A Python implementation of a part of compareDEtools.",
     packages=find_packages(),
-    package_data={NAME: ["data/*.csv"]},
+    package_data={NAME: ["data/*.csv", "data/*.yaml"]},
     cmdclass={"clean": CleanCommand},
 )
