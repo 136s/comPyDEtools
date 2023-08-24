@@ -30,10 +30,9 @@ class Result:
     nsample: float = field(default=Default.NSAMPLE[0])
     outlier_mode: Outlier = field(default=Outlier.first)
     pde: float = field(default=Default.PDE[0])
+    seed: int = field(default=Default.SEED)
     metrics_type: Metrics = field(default=Metrics.first)
     method_type: Method = field(default=Method.first)
-    nrep: int = field(default=Default.NREP)
-    seed: int = field(default=Default.SEED)
     value: float = field(init=False, repr=False)
 
 
@@ -100,13 +99,13 @@ class Box:
     simul_data: Simul = field(default=Simul.first)
     disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
+    nrep: int = field(default=Default.NREP)
+    seed: int = field(default=Default.SEED)
     nsample: float = field(default=Default.NSAMPLE[0])
     outlier_mode: Outlier = field(default=Outlier.first)
     pde: float = field(default=Default.PDE[0])
     metrics_type: Metrics = field(default=Metrics.first)
     method_type: Method = field(default=Method.first)
-    nrep: int = field(default=Default.NREP)
-    seed: int = field(default=Default.SEED)
     datasets: list[Dataset] = field(default_factory=list, init=False, repr=False)
     results: list[Result] = field(init=False, repr=False)
 
@@ -129,6 +128,8 @@ class Plot:
     simul_data: Simul = field(default=Simul.first)
     disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
+    nrep: int = field(default=Default.NREP)
+    seed: int = field(default=Default.SEED)
     nsample: float = field(default=Default.NSAMPLE[0])
     outlier_mode: Outlier = field(default=Outlier.first)
     pde: float = field(default=Default.PDE[0])
@@ -141,12 +142,13 @@ class Plot:
                 simul_data=self.simul_data,
                 disp_type=self.disp_type,
                 frac_up=self.frac_up,
+                nrep=self.nrep,
+                seed=self.seed,
                 nsample=self.nsample,
                 outlier_mode=self.outlier_mode,
                 pde=self.pde,
                 metrics_type=self.metrics_type,
                 method_type=method_type,
-                nrep=CONDITION.nrep,
             )
             self.boxes.append(box)
 
@@ -156,6 +158,8 @@ class Figure:
     simul_data: Simul = field(default=Simul.first)
     disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
+    nrep: int = field(default=Default.NREP)
+    seed: int = field(default=Default.SEED)
     nsample: float = field(default=Default.NSAMPLE[0])
     outlier_mode: Outlier = field(default=Outlier.first)
     plots: list[Plot] = field(default_factory=list, init=False, repr=False)
@@ -167,6 +171,8 @@ class Figure:
                     simul_data=self.simul_data,
                     disp_type=self.disp_type,
                     frac_up=self.frac_up,
+                    nrep=self.nrep,
+                    seed=self.seed,
                     nsample=self.nsample,
                     outlier_mode=self.outlier_mode,
                     pde=pde,
@@ -180,6 +186,8 @@ class Page:
     simul_data: Simul = field(default=Simul.first)
     disp_type: Disp = field(default=Disp.first)
     frac_up: float = field(default=Default.FRAC_UP[0])
+    nrep: int = field(default=Default.NREP)
+    seed: int = field(default=Default.SEED)
     figures: list[Figure] = field(default_factory=list, init=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -189,6 +197,8 @@ class Page:
                     simul_data=self.simul_data,
                     disp_type=self.disp_type,
                     frac_up=self.frac_up,
+                    nrep=self.nrep,
+                    seed=self.seed,
                     nsample=nsample,
                     outlier_mode=outlier_mode,
                 )
