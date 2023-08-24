@@ -19,7 +19,7 @@ from .const import (
     Method,
     Default,
 )
-from .generation import synthetic_data_simulation
+from .generation import synthetic_data_simulation, GENE_ID_COLNAME
 
 
 @dataclass
@@ -56,21 +56,6 @@ class Dataset:
         self.ngenes = Simul.ngenes(self.simul_data)
         self.nde = round(self.ngenes * self.pde / 100)
 
-    def generate(self) -> pd.DataFrame:
-        if not hasattr(self, "counts"):
-            self.convert_pde()
-            self.counts = synthetic_data_simulation(
-                simul_data=self.simul_data,
-                disp_type=self.disp_type,
-                frac_up=self.frac_up,
-                nsample=self.nsample,
-                outlier_mode=self.outlier_mode,
-                ngenes=self.ngenes,
-                nde=self.nde,
-                seed=self.seed,
-            )
-        return self.counts
-
     def set_path(self):
         self.cond_str = "_".join(
             [
@@ -86,13 +71,28 @@ class Dataset:
             self.cond_str, f"{self.cond_str}_rep{self.seed}.tsv"
         )
 
-    def save(self):
-        self.generate()
-        self.set_path()
-        self.filepath.parent.mkdir(exist_ok=True, parents=True)
-        self.counts.to_csv(
-            self.filepath, sep="\t", lineterminator="\n", encoding="utf-8"
-        )
+    def generate(self) -> pd.DataFrame:
+        if not hasattr(self, "counts"):
+            self.convert_pde()
+            self.set_path()
+            if self.filepath.is_file():
+                self.counts = pd.read_table(self.filepath, index_col=GENE_ID_COLNAME)
+            else:
+                self.counts = synthetic_data_simulation(
+                    simul_data=self.simul_data,
+                    disp_type=self.disp_type,
+                    frac_up=self.frac_up,
+                    nsample=self.nsample,
+                    outlier_mode=self.outlier_mode,
+                    ngenes=self.ngenes,
+                    nde=self.nde,
+                    seed=self.seed,
+                )
+                self.filepath.parent.mkdir(exist_ok=True, parents=True)
+                self.counts.to_csv(
+                    self.filepath, sep="\t", lineterminator="\n", encoding="utf-8"
+                )
+        return self.counts
 
 
 @dataclass

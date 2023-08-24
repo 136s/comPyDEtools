@@ -33,6 +33,9 @@ DATASET_PARAMETERS: dict[
     ],
     pd.Series,
 ]
+GENE_ID_COLNAME = "Gene_ID"
+GENE_SYMBOL_COLNAME = "Gene_Symbol"
+GENE_DESCRIPTION_COLNAME = "Description"
 
 
 def order(data: list[int] | pd.Series) -> list[int]:
@@ -434,14 +437,14 @@ def synthetic_data_simulation(
 
     # modify Gene IDs, sample names, Gene Symbols and Description
     count_matrix = pd.DataFrame(counts, dtype=int)
-    count_matrix.index = count_matrix.index.to_series().add(1).rename("Gene_ID")
+    count_matrix.index = count_matrix.index.to_series().add(1).rename(GENE_ID_COLNAME)
     count_matrix.columns = [f"TRT-{s+1}" for s in range(nsample)] + [
         f"CTRL-{s+1}" for s in range(nsample)
     ]
     gene_info = count_matrix.apply(lambda v: f"LOC{v.name}", axis=1).to_frame(
-        "Gene_Symbol"
+        GENE_SYMBOL_COLNAME
     )
-    gene_info["Description"] = (
+    gene_info[GENE_DESCRIPTION_COLNAME] = (
         ["up"] * num_updeg
         + ["dn"] * (nde - num_updeg)
         + ["ns"] * (len(gene_info) - nde)
