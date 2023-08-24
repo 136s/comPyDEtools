@@ -7,6 +7,7 @@ Simulation core classes
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from .condition import CONDITION
@@ -106,21 +107,7 @@ class Box:
     pde: float = field(default=Default.PDE[0])
     metrics_type: Metrics = field(default=Metrics.first)
     method_type: Method = field(default=Method.first)
-    datasets: list[Dataset] = field(default_factory=list, init=False, repr=False)
     results: list[Result] = field(init=False, repr=False)
-
-    def __post_init__(self) -> None:
-        for seed_ in range(self.seed, self.seed + self.nrep):
-            dataset = Dataset(
-                simul_data=self.simul_data,
-                disp_type=self.disp_type,
-                frac_up=self.frac_up,
-                nsample=self.nsample,
-                outlier_mode=self.outlier_mode,
-                pde=self.pde,
-                seed=seed_,
-            )
-            self.datasets.append(dataset)
 
 
 @dataclass
@@ -135,6 +122,7 @@ class Plot:
     pde: float = field(default=Default.PDE[0])
     metrics_type: Metrics = field(default=Metrics.first)
     boxes: list[Box] = field(default_factory=list, init=False, repr=False)
+    datasets: list[Dataset] = field(default_factory=list, init=False, repr=False)
 
     def __post_init__(self) -> None:
         for method_type in CONDITION.method_type:
@@ -151,6 +139,20 @@ class Plot:
                 method_type=method_type,
             )
             self.boxes.append(box)
+        ds_seeds = np.random.default_rng(self.seed).integers(
+            0, np.iinfo(np.int64).max, size=self.nrep
+        )
+        for ds_seed in ds_seeds:
+            dataset = Dataset(
+                simul_data=self.simul_data,
+                disp_type=self.disp_type,
+                frac_up=self.frac_up,
+                nsample=self.nsample,
+                outlier_mode=self.outlier_mode,
+                pde=self.pde,
+                seed=ds_seed,
+            )
+            self.datasets.append(dataset)
 
 
 @dataclass

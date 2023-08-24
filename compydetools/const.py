@@ -81,4 +81,4 @@ class Default:
     NSAMPLE: tuple[int] = (3, 10)
     PDE: tuple[float] = (0.27, 5, 10, 30, 60)
     NREP: int = 50
-    SEED: int = 368697996
+    SEED: int = 330252033
