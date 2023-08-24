@@ -154,6 +154,11 @@ class Plot:
             )
             self.datasets.append(dataset)
 
+    def generate_datasets(self) -> list[Dataset]:
+        for dataset in self.datasets:
+            dataset.generate()
+        return self.datasets
+
 
 @dataclass
 class Figure:
@@ -182,6 +187,11 @@ class Figure:
                 )
                 self.plots.append(plot)
 
+    def generate_datasets(self) -> list[Dataset]:
+        for plot in self.plots:
+            plot.generate_datasets()
+        return self.plots
+
 
 @dataclass
 class Page:
@@ -205,3 +215,28 @@ class Page:
                     outlier_mode=outlier_mode,
                 )
                 self.figures.append(figure)
+
+    def generate_datasets(self) -> list[Dataset]:
+        for figure in self.figures:
+            figure.generate_datasets()
+        return self.figures
+
+
+@dataclass
+class AllPages:
+    nrep: int = field(default=Default.NREP)
+    seed: int = field(default=Default.SEED)
+    pages: list[Page] = field(default_factory=list, init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        for simul_data in CONDITION.simul_data:
+            for disp_type in CONDITION.disp_type:
+                for frac_up in CONDITION.frac_up:
+                    page = Page(
+                        simul_data=simul_data,
+                        disp_type=disp_type,
+                        frac_up=frac_up,
+                        nrep=self.nrep,
+                        seed=self.seed,
+                    )
+                    self.pages.append(page)
