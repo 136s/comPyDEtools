@@ -50,8 +50,7 @@ class Dataset:
     nde: int = field(init=False, repr=False)
     counts: pd.DataFrame = field(init=False, repr=False)
     cond_str: str = field(init=False, repr=False)
-    countpath: Path = field(init=False, repr=False)
-    configpath: Path = field(init=False, repr=False)
+    filepath: Path = field(init=False, repr=False)
 
     def convert_pde(self) -> None:
         self.ngenes = Simul.ngenes(self.simul_data)
@@ -83,17 +82,16 @@ class Dataset:
                 f"{self.nde}DE",
             ]
         )
-        self.countpath = DE_INPUT_DIR.joinpath(
+        self.filepath = DE_INPUT_DIR.joinpath(
             self.cond_str, f"{self.cond_str}_rep{self.seed}.tsv"
         )
-        self.configpath = self.countpath.with_suffix(".yaml")
 
     def save(self):
         self.generate()
         self.set_path()
-        self.countpath.parent.mkdir(exist_ok=True, parents=True)
+        self.filepath.parent.mkdir(exist_ok=True, parents=True)
         self.counts.to_csv(
-            self.countpath, sep="\t", lineterminator="\n", encoding="utf-8"
+            self.filepath, sep="\t", lineterminator="\n", encoding="utf-8"
         )
 
 

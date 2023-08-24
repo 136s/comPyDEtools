@@ -1,5 +1,10 @@
 %YAML 1.2
 ---
+# analysis command and result
+analysis: !!map
+  cmd: !!str some command to analysis
+  res: !!str regex/of/path/to/result/files
+
 # "KIRC", "Bottomly", "mKdB", "mBdK"
 simul_data: !!seq
   - KIRC
