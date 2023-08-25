@@ -10,9 +10,6 @@ from typing import Self
 
 
 StrPath = str | Path
-DE_INPUT_DIR = Path("input")
-DE_OUTPUT_DIR = Path("output")
-COMP_RES_DIR = Path("result")
 
 
 class Enum(OriginalEnum):

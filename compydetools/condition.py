@@ -28,8 +28,17 @@ CONDITION = DictConfig(
         "nsample": Default.NSAMPLE,
         "pde": Default.PDE,
         "nrep": Default.NREP,
+        "dirs": {
+            "de_input": "input",
+            "de_output": "output",
+            "compre_result": "result",
+        },
     }
 )
+
+DE_INPUT_DIR = Path(CONDITION.dirs.de_input)
+DE_OUTPUT_DIR = Path(CONDITION.dirs.de_output)
+COMP_RES_DIR = Path(CONDITION.dirs.compre_result)
 
 
 def set_condition(condition_path: StrPath) -> None:
@@ -47,3 +56,9 @@ def set_condition(condition_path: StrPath) -> None:
             OmegaConf.set_struct(overriding, True)
         CONDITION.merge_with(overriding)
     print(f"CINDITION: {pformat(dict(CONDITION))}")
+    global DE_INPUT_DIR
+    DE_INPUT_DIR = Path(CONDITION.dirs.de_input)
+    global DE_OUTPUT_DIR
+    DE_OUTPUT_DIR = Path(CONDITION.dirs.de_output)
+    global COMP_RES_DIR
+    COMP_RES_DIR = Path(CONDITION.dirs.compre_result)

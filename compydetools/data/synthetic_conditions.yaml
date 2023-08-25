@@ -5,6 +5,12 @@ analysis: !!map
   cmd: !!str some command to analysis
   res: !!str regex/of/path/to/result/files
 
+# directory
+dirs: !!map
+  de_input: input
+  de_output: output
+  compre_result: result
+
 # "KIRC", "Bottomly", "mKdB", "mBdK"
 simul_data: !!seq
   - KIRC

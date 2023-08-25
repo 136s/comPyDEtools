@@ -10,9 +10,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .condition import CONDITION
+from .condition import CONDITION, DE_INPUT_DIR
 from .const import (
-    DE_INPUT_DIR,
     Simul,
     Disp,
     Outlier,
