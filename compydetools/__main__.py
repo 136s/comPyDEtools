@@ -9,7 +9,7 @@ from .core import AllPages
 
 def main():
     # generate datasets
-    allpages = AllPages()
+    allpages = AllPages(nrep=CONDITION.nrep)
     allpages.generate_datasets()
     # run analysis
     for cmd in CONDITION.analysis.cmds:
