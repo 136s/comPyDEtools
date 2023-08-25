@@ -2,7 +2,8 @@
 ---
 # analysis command and result
 analysis: !!map
-  cmd: !!str some command to analysis
+  cmds: !!seq
+    - !!str some commands to analysis by line
   res: !!str regex/of/path/to/result/files
 
 # directory

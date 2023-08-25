@@ -239,3 +239,8 @@ class AllPages:
                         seed=self.seed,
                     )
                     self.pages.append(page)
+
+    def generate_datasets(self) -> list[Page]:
+        for figure in self.pages:
+            figure.generate_datasets()
+        return self.pages
