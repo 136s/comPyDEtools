@@ -161,3 +161,8 @@ cython_debug/
 
 # jupter notebook
 *.ipynb
+
+# default output directory
+/input
+/output
+/result
