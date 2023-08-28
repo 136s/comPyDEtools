@@ -11,6 +11,7 @@ from hydra import compose, initialize_config_dir
 from omegaconf import DictConfig, OmegaConf
 
 from .const import Enum, StrPath, Simul, Disp, Outlier, Metrics, Method, Default
+from .generation import GENE_DESCRIPTION_COLNAME
 
 
 CONDTYPE_CALSS: dict[str, Enum] = {
@@ -28,6 +29,13 @@ CONDITION = DictConfig(
         "nsample": Default.NSAMPLE,
         "pde": Default.PDE,
         "nrep": Default.NREP,
+        "analysis": {
+            "cmds": [],
+            "res": "",
+            "de_true": GENE_DESCRIPTION_COLNAME,
+            "de_score": "fdr",
+            "de_score_threshold": 0.1,
+        },
         "dirs": {
             "de_input": "input",
             "de_output": "output",

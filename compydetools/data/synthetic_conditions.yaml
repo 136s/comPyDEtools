@@ -7,6 +7,11 @@ analysis: !!map
   # {count_stem} replaced by dataset stem
   # {method_type} replaced by method_type
   res: !!str regex/of/path/to/result/files
+  # colname of true deg regulation (up, dn or ns)
+  de_true: !!str Description
+  # colname of deg score (like p-value)
+  de_score: !!str fdr
+  de_score_threshold: !!float 0.1
 
 # directory
 dirs: !!map

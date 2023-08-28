@@ -1,19 +1,27 @@
 #!/usr/bin/env python
 
-import subprocess
+import pickle
 
 from . import parser
 from .condition import set_condition, CONDITION
-from .core import AllPages
+from .core import Paper
+from .utils import run_commands
 
 
 def main():
     # generate datasets
-    allpages = AllPages(nrep=CONDITION.nrep)
-    allpages.generate_datasets()
+    paper = Paper(nrep=CONDITION.nrep)
+    paper.generate_datasets()
     # run analysis
-    for cmd in CONDITION.analysis.cmds:
-        subprocess.run(cmd, shell=True)
+    for anal_res in run_commands(CONDITION.analysis.cmds):
+        print(anal_res)
+    # calc metrics
+    paper.calc_metrics()
+    paper.res2d.to_csv("paper.csv")
+    # draw figures
+    paper.draw()
+    with open("paper.pickle", "wb") as f:
+        pickle.dump(paper, f)
 
 
 if __name__ == "__main__":

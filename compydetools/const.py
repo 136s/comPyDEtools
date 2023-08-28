@@ -6,10 +6,11 @@ Constant classes
 
 from enum import Enum as OriginalEnum, unique
 from pathlib import Path
-from typing import Self
+from typing import Literal, Self
 
 
 StrPath = str | Path
+MetricsInput = dict[Literal["y_true", "y_score", "y_pred"], list[float]]
 
 
 class Enum(OriginalEnum):
@@ -79,3 +80,4 @@ class Default:
     PDE: tuple[float] = (0.27, 5, 10, 30, 60)
     NREP: int = 50
     SEED: int = 330252033
+    PALETTE: list[str] = ["#ff4b00", "#fff100", "#03af7a", "#ed7ca2", "#005aff"]

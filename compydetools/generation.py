@@ -36,6 +36,9 @@ DATASET_PARAMETERS: dict[
 GENE_ID_COLNAME = "Gene_ID"
 GENE_SYMBOL_COLNAME = "Gene_Symbol"
 GENE_DESCRIPTION_COLNAME = "Description"
+UP_DEG = "up"
+DN_DEG = "dn"
+NO_DEG = "ns"
 
 
 def order(data: list[int] | pd.Series) -> list[int]:
@@ -445,9 +448,9 @@ def synthetic_data_simulation(
         GENE_SYMBOL_COLNAME
     )
     gene_info[GENE_DESCRIPTION_COLNAME] = (
-        ["up"] * num_updeg
-        + ["dn"] * (nde - num_updeg)
-        + ["ns"] * (len(gene_info) - nde)
+        [UP_DEG] * num_updeg
+        + [DN_DEG] * (nde - num_updeg)
+        + [NO_DEG] * (len(gene_info) - nde)
     )
 
     return gene_info.join(count_matrix)
