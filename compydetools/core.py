@@ -348,7 +348,17 @@ class Figure:
     def make(self, save: bool = True):
         self.draw(save=save)
         self.set_path()
-        utils.combine_figures(self.plots, output=self.filepath if save else None)
+        # get child plots
+        children: dict[str, mplFigure] = {}
+        for plot in self.plots:
+            children[f"{plot.nsample}spc_{plot.outlier_mode.name}"] = plot.mplobj
+        # combine figures
+        utils.combine_figures(
+            self.plots,
+            nsamples=CONDITION.nsample,
+            outlier_modes=CONDITION.outlier_mode,
+            output=self.filepath if save else None,
+        )
 
 
 @dataclass

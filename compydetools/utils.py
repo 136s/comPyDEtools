@@ -23,17 +23,7 @@ from sklearn.metrics import (
 import skunk
 
 from .const import Default, Metrics, MetricsInput, Outlier, StrPath
-from .core import Paper, Plot
 from .generation import GENE_DESCRIPTION_COLNAME, UP_DEG, DN_DEG
-
-
-def all_conditions() -> Paper:
-    """Get all pages of specified conditions.
-
-    Returns:
-        Paper: list of Figures.
-    """
-    return Paper()
 
 
 def run_commands(cmds: list) -> Generator[str, None, None]:
@@ -139,22 +129,17 @@ def draw_plot(
     return g
 
 
-def combine_figures(plots: list[Plot], output: StrPath = None) -> str:
-    children: dict[str, mplFigure] = {}
+def combine_figures(
+    plots: dict[str, mplFigure],
+    nsamples: list[int],
+    outlier_modes: list[Outlier],
+    output: StrPath = None,
+) -> str:
     w, h = 0, 0
-    nsamples: list[int] = []
-    outlier_modes: list[Outlier] = []
-    for plot in plots:
-        # get child plots
-        children[f"{plot.nsample}spc_{plot.outlier_mode.name}"] = plot.mplobj
-        # pick params
-        _w, _h = plot.mplobj.get_size_inches()
+    for plot in plots.values():
+        _w, _h = plot.get_size_inches()
         w = max(w, _w)
         h = max(h, _h)
-        if plot.nsample not in nsamples:
-            nsamples.append(plot.nsample)
-        if plot.outlier_mode not in outlier_modes:
-            outlier_modes.append(plot.outlier_mode)
     # prepare parent figure
     ncols = len(nsamples)
     nrows = len(outlier_modes)
@@ -168,7 +153,7 @@ def combine_figures(plots: list[Plot], output: StrPath = None) -> str:
             ax.axis("off")
             skunk.connect(ax, f"{row}spc_{col.name}")
     # insert mpl figures to parent figure
-    combined = skunk.insert(children)
+    combined = skunk.insert(plots)
     if output:
         with open(output, "w") as f:
             f.write(combined)
