@@ -31,7 +31,7 @@ def main():
     # draw figures
     print("Drawing figures...", file=sys.stdout)
     paper.make()
-    with open("paper.pickle", "wb") as f:
+    with open(COMP_RES_DIR.joinpath("paper.pickle"), "wb") as f:
         pickle.dump(paper, f)
 
 
