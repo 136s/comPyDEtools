@@ -150,7 +150,14 @@ def combine_figures(
     # set skunk gid
     for x, col in enumerate(nsamples):
         for y, row in enumerate(outlier_modes):
-            ax: Axes = axs[y][x]
+            if ncols == 1 and nrows == 1:
+                ax: Axes = axs
+            elif ncols == 1:
+                ax: Axes = axs[y]
+            elif nrows == 1:
+                ax: Axes = axs[x]
+            else:
+                ax: Axes = axs[y][x]
             ax.axis("off")
             skunk.connect(ax, f"{col}spc_{row.name}")
     # insert mpl figures to parent figure
