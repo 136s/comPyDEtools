@@ -52,7 +52,7 @@ setup(
     package_data={NAME: ["data/*.csv", "data/*.yaml"]},
     python_requires=">=3.10",
     install_requires=[
-        "hydra",
+        "hydra-core",
         "matplotlib",
         "numpy",
         "omegaconf",
