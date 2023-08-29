@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import pickle
+import sys
 
 from . import parser
-from .condition import set_condition, CONDITION
+from .condition import set_condition, CONDITION, COMP_RES_DIR
 from .core import Paper
 from .utils import run_commands
 
@@ -11,15 +12,25 @@ from .utils import run_commands
 def main():
     # generate datasets
     paper = Paper(nrep=CONDITION.nrep)
+    print("Generating datasets...", file=sys.stdout)
     paper.generate_datasets()
     # run analysis
+    print("Running DE analysis...", file=sys.stdout)
     for anal_res in run_commands(CONDITION.analysis.cmds):
-        print(anal_res)
+        print(anal_res, file=sys.stdout)
     # calc metrics
+    print("Calculating metrics of DE analysis...", file=sys.stdout)
     paper.calc_metrics()
-    paper.res2d.to_csv("paper.csv")
+    # save metrics values
+    COMP_RES_DIR.mkdir(exist_ok=True, parents=True)
+    paper.res2d.to_csv(
+        COMP_RES_DIR.joinpath("metrics_values.csv"),
+        lineterminator="\n",
+        encoding="utf-8-sig",
+    )
     # draw figures
-    paper.draw()
+    print("Drawing figures...", file=sys.stdout)
+    paper.make()
     with open("paper.pickle", "wb") as f:
         pickle.dump(paper, f)
 

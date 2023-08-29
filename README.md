@@ -30,8 +30,29 @@ pip install https://github.com/136s/comPyDEtools.git
     python -m compydetools -c condition.yaml  # specify your condition file made at step 1.
     ```
 
+    or
+
+    <details>
+    <summary>run in Python</summary>
+
+    ```python
+    from compydetools.condition import CONDITION, set_condition
+    from compydetools.core import Paper
+    from compydetools.utils import run_commands
+
+    set_condition("condition.yaml")  # specify your condition file made at Usage 1.
+    paper = Paper(nrep=CONDITION.nrep)
+    paper.generate_datasets()
+    for anal_res in run_commands(CONDITION.analysis.cmds):
+        print(anal_res)
+    paper.make()
+    ```
+
+    </details>
+
 3. Check generated files
-    - `input/`: simulated RNA-seq data
+
+   - `input/`: simulated RNA-seq data
       - dataset structure
         - first line is header
         - `Gene_ID` column: sequential numbers from 1 to the number of genes
@@ -42,8 +63,8 @@ pip install https://github.com/136s/comPyDEtools.git
         - file path: `{simul_data}_{disp_type}_upFrac{frac_up}_{nsample}spc_{outlier_mode}_{nde}DE/{simul_data}_{disp_type}_upFrac{frac_up}_{nsample}spc_{outlier_mode}_{nde}DE_rep{seed}.tsv`
         - newline character: LF
         - enxoding: UTF-8
-    - `output/`: DE analysis results by `analysis.cmds` in the condition file
-    - `result/`: plots of performance comparison
+   - `output/`: DE analysis results by `analysis.cmds` in the condition file
+   - `result/`: plots of performance comparison
 
 ## condition file (`condition.yaml`)
 
@@ -81,8 +102,8 @@ pip install https://github.com/136s/comPyDEtools.git
 - `Result` class represents a results of a `Dataset` under each method and metrics
 
 |property \| Class|`Paper`|`Figure`|`Plot`|`DataPool`|`Dataset`|`Result`|
-|:----|:----|:----|:----|:----|:----|:----|
-|has a list of ...|`Figure`|`Plot`|`DataPool`|`Dataset`, `Result`| | |
+|:----|----:|----:|----:|----:|----:|----:|
+|a list of|`Figure`|`Plot`|`DataPool`|`Dataset`, `Result`| | |
 |number of repetition (`nrep`)|1|1|1|1|||
 |simulation data (`simul_data`)| |1|1|1|1|1|
 |dispersion type (`disp_type`)| |1|1|1|1|1|
@@ -108,3 +129,9 @@ Table: Class / property correspondence (\*: many)
   - `metrics_type` in the condition file
 - `Method` class is a list of DE analysis method
   - `method_type` in the condition file
+
+## License
+
+[GPL2.0](https://choosealicense.com/licenses/gpl-2.0/)
+
+This is a partial port of [unistbig/compareDEtools](https://github.com/unistbig/compareDEtools).

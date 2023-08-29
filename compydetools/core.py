@@ -39,16 +39,17 @@ class Result:
         self.set_method_values()
 
     def set_method_values(self) -> None:
-        for method_type in self.method_types:
-            de_output_path = CONDITION.analysis.res.replace(
-                "{count_stem}", self.dsid
-            ).replace("{method_type}", method_type.name)
-            self.method_values[method_type] = utils.load_metrics_input(
-                de_output_path,
-                de_true_colname=CONDITION.analysis.de_true,
-                de_score_colname=CONDITION.analysis.de_score,
-                de_score_threshold=CONDITION.analysis.de_score_threshold,
-            )
+        if not self.method_values:
+            for method_type in self.method_types:
+                de_output_path = CONDITION.analysis.res.replace(
+                    "{count_stem}", self.dsid
+                ).replace("{method_type}", method_type.name)
+                self.method_values[method_type] = utils.load_metrics_input(
+                    de_output_path,
+                    de_true_colname=CONDITION.analysis.de_true,
+                    de_score_colname=CONDITION.analysis.de_score,
+                    de_score_threshold=CONDITION.analysis.de_score_threshold,
+                )
 
     def calc_metrics(self) -> None:
         if not self.metrics_values:
@@ -60,38 +61,39 @@ class Result:
                     )
 
     def set_res2d(self) -> None:
-        df = pd.DataFrame(self.metrics_values)
-        df.index = df.index.map(lambda v: v.name)
-        df.columns = df.columns.map(lambda v: v.name)
-        self._res2d = pd.melt(
-            df.reset_index(names="method"), id_vars="method", var_name="metrics"
-        )
-        self._res2d["simul_data"] = self.simul_data.name
-        self._res2d["disp_type"] = self.disp_type.name
-        self._res2d["frac_up"] = self.frac_up
-        self._res2d["nsample"] = self.nsample
-        self._res2d["outlier_mode"] = self.outlier_mode.name
-        self._res2d["pde"] = self.pde
-        self._res2d["seed"] = self.seed
-        self._res2d.set_index(
-            [
-                "simul_data",
-                "disp_type",
-                "frac_up",
-                "nsample",
-                "outlier_mode",
-                "pde",
-                "seed",
-                "method",
-                "metrics",
-            ],
-            inplace=True,
-        )
+        if not hasattr(self, "_res2d"):
+            self.calc_metrics()
+            df = pd.DataFrame(self.metrics_values)
+            df.index = df.index.map(lambda v: v.name)
+            df.columns = df.columns.map(lambda v: v.name)
+            self._res2d = pd.melt(
+                df.reset_index(names="method"), id_vars="method", var_name="metrics"
+            )
+            self._res2d["simul_data"] = self.simul_data.name
+            self._res2d["disp_type"] = self.disp_type.name
+            self._res2d["frac_up"] = self.frac_up
+            self._res2d["nsample"] = self.nsample
+            self._res2d["outlier_mode"] = self.outlier_mode.name
+            self._res2d["pde"] = self.pde
+            self._res2d["seed"] = self.seed
+            self._res2d.set_index(
+                [
+                    "simul_data",
+                    "disp_type",
+                    "frac_up",
+                    "nsample",
+                    "outlier_mode",
+                    "pde",
+                    "seed",
+                    "method",
+                    "metrics",
+                ],
+                inplace=True,
+            )
 
     @property
     def res2d(self) -> pd.DataFrame:
-        if not hasattr(self, "_res2d"):
-            self.set_res2d()
+        self.set_res2d()
         return self._res2d
 
 
@@ -110,6 +112,10 @@ class Dataset:
     cond_str: str = field(init=False, repr=False)
     dsid: str = field(init=False, repr=False)
     filepath: Path = field(init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        self.convert_pde()
+        self.set_path()
 
     def convert_pde(self) -> None:
         self.ngenes = Simul.ngenes(self.simul_data)
@@ -131,8 +137,6 @@ class Dataset:
 
     def generate(self) -> None:
         if not hasattr(self, "counts"):
-            self.convert_pde()
-            self.set_path()
             if self.filepath.is_file():
                 self.counts = pd.read_table(self.filepath, index_col=GENE_ID_COLNAME)
             else:
@@ -193,30 +197,31 @@ class DataPool:
         return self.datasets
 
     def set_results(self) -> None:
-        for dataset in self.datasets:
-            result = Result(
-                simul_data=dataset.simul_data,
-                disp_type=dataset.disp_type,
-                frac_up=dataset.frac_up,
-                nsample=dataset.nsample,
-                outlier_mode=dataset.outlier_mode,
-                pde=dataset.pde,
-                seed=dataset.seed,
-                dsid=dataset.dsid,
-                method_types=CONDITION.method_type,
-                metrics_types=CONDITION.metrics_type,
-            )
-            self.results.append(result)
+        if not self.results:
+            for dataset in self.datasets:
+                result = Result(
+                    simul_data=dataset.simul_data,
+                    disp_type=dataset.disp_type,
+                    frac_up=dataset.frac_up,
+                    nsample=dataset.nsample,
+                    outlier_mode=dataset.outlier_mode,
+                    pde=dataset.pde,
+                    seed=dataset.seed,
+                    dsid=dataset.dsid,
+                    method_types=CONDITION.method_type,
+                    metrics_types=CONDITION.metrics_type,
+                )
+                self.results.append(result)
 
     def calc_metrics(self) -> list[Result]:
-        if not self.results:
-            self.set_results()
+        self.set_results()
         for result in self.results:
             result.calc_metrics()
         return self.results
 
     @property
     def res2d(self) -> pd.DataFrame:
+        self.calc_metrics()
         return pd.concat([result.res2d for result in self.results])
 
 
@@ -354,7 +359,7 @@ class Figure:
             children[f"{plot.nsample}spc_{plot.outlier_mode.name}"] = plot.mplobj
         # combine figures
         utils.combine_figures(
-            self.plots,
+            children,
             nsamples=CONDITION.nsample,
             outlier_modes=CONDITION.outlier_mode,
             output=self.filepath if save else None,

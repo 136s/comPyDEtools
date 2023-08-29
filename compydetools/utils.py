@@ -98,6 +98,7 @@ def draw_plot(
     output: StrPath | None = None,
 ) -> sns.FacetGrid:
     aspect = len(data["method"].unique()) / 5
+    plt.rcParams["svg.fonttype"] = "none"
     sns.set_style("darkgrid")
     g: sns.FacetGrid = sns.catplot(
         data,
@@ -143,15 +144,15 @@ def combine_figures(
     # prepare parent figure
     ncols = len(nsamples)
     nrows = len(outlier_modes)
-    fig, axs = plt.subplots(ncols, nrows, figsize=(w * ncols, h * nrows))
+    fig, axs = plt.subplots(nrows, ncols, figsize=(w * ncols, h * nrows))
     fig.subplots_adjust(wspace=0, hspace=0)
     fig.tight_layout()
     # set skunk gid
-    for x, col in enumerate(outlier_modes):
-        for y, row in enumerate(nsamples):
-            ax: Axes = axs[x][y]
+    for x, col in enumerate(nsamples):
+        for y, row in enumerate(outlier_modes):
+            ax: Axes = axs[y][x]
             ax.axis("off")
-            skunk.connect(ax, f"{row}spc_{col.name}")
+            skunk.connect(ax, f"{col}spc_{row.name}")
     # insert mpl figures to parent figure
     combined = skunk.insert(plots)
     if output:
