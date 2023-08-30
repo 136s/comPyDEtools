@@ -29,7 +29,7 @@ class Result:
     dsid: str = field(default=None)
     method_types: list[Method] = field(default_factory=list)
     method_values: dict[Method, MetricsInput] = field(default_factory=dict, repr=False)
-    metrics_types: list[Metrics] = field(default_factory=list(Metrics))
+    metrics_types: list[Metrics] = field(default_factory=list)
     metrics_values: dict[Metrics, dict[Method, float]] = field(
         default_factory=dict, init=False, repr=False
     )
@@ -283,6 +283,8 @@ class Plot:
         if not hasattr(self, "mplobj"):
             self.set_path()
             data = self.res2d.reset_index()
+            from .const import Method  # reload Method after updating
+
             for colname, classname in {"method": Method, "metrics": Metrics}.items():
                 data[colname] = data[colname].apply(lambda v: classname[v].value)
 

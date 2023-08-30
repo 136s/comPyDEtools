@@ -66,13 +66,9 @@ metrics_type: !!seq
   - f1score
   - kappa
 
-# "fc", "nc", "rp", "cp", "deseq2"
-method_type: !!seq
-  - fc
-  - nc
-  - rp
-  - cp
-  - deseq2
+# specify your dict({method_type}: method name in figures,)
+method_type: !!map
+  deseq2: Deseq2
 
 # int 3-
 nrep: !!int 50

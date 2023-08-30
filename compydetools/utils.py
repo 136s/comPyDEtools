@@ -99,7 +99,7 @@ def draw_plot(
 ) -> sns.FacetGrid:
     aspect = len(data["method"].unique()) / 5
     plt.rcParams["svg.fonttype"] = "none"
-    sns.set_style("darkgrid")
+    sns.set_style("darkgrid", rc={"axes.facecolor": "ebebeb"})
     g: sns.FacetGrid = sns.catplot(
         data,
         x="method",
@@ -120,8 +120,9 @@ def draw_plot(
     if plot_title:
         g.figure.suptitle(plot_title)
     g.set_axis_labels("", "")
-    g.set_titles(col_template="pDE = {col_name}%", row_template="{row_name}")
+    g.set_titles(col_template="pDE = {col_name}%", row_template="{row_name}", size=14)
     for ax in g.axes.flat:
+        ax.grid(which="both", axis="both", color="white", linewidth=2)
         plt.setp(ax.get_xticklabels(), rotation=90)
     g.tight_layout()
     if output:
@@ -146,7 +147,6 @@ def combine_figures(
     nrows = len(outlier_modes)
     fig, axs = plt.subplots(nrows, ncols, figsize=(w * ncols, h * nrows))
     fig.subplots_adjust(wspace=0, hspace=0)
-    fig.tight_layout()
     # set skunk gid
     for x, col in enumerate(nsamples):
         for y, row in enumerate(outlier_modes):

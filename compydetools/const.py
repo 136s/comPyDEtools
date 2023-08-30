@@ -7,6 +7,7 @@ Constant classes
 from enum import Enum as OriginalEnum, unique
 from pathlib import Path
 from typing import Literal, Self
+import warnings
 
 
 StrPath = str | Path
@@ -67,11 +68,15 @@ class Metrics(Enum):
 
 @unique
 class Method(Enum):
-    fc = "Fold change"
-    nc = "Normalized change"
-    rp = "Rank product"
-    cp = "Combined probability"
     deseq2 = "DEseq2"
+
+
+def update_method_class(d: dict):
+    try:
+        global Method
+        Method = Enum("Method", d)
+    except ValueError:
+        warnings.warn(f"Invalid methods = {d}")
 
 
 class Default:
