@@ -66,7 +66,7 @@ metrics_type: !!seq
   - f1score
   - kappa
 
-# specify your dict({method_type}: method name in figures,)
+# specify your dict("method name in path of DE results": "method name in figures",)
 method_type: !!map
   deseq2: Deseq2
 

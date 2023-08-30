@@ -85,9 +85,8 @@ pip install https://github.com/136s/comPyDEtools.git
 - `pde`: percent of DE in all genes (float, $(0, 100]$)
 - `metrics_type`: auc, tpr, fdr, cutoff, f1score or kapppa
   - if you want to add any metrics, modify `const.Metrics` and `utils.calc_metrics()` by fork or PR
-- `method_type`: DE analysis method (fc, nc, rp, cp and deseq2)
+- `method_type`: specify your DE analysis method (defaults to {"deseq2": "Deseq2"})
   - comPyDEtools recognizes the type of DE analysis method only by the output folder path (`analysis.res` in the condition file)
-  - if you want to add any method, modify `const.Method` by fork or PR
 - `nrep`: number of simulation repetition under one condition (int, $3<=$)
 
 ## Development
