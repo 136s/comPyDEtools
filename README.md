@@ -27,7 +27,7 @@ pip install https://github.com/136s/comPyDEtools.git
 2. Run
 
     ```Shell
-    python -m compydetools -c condition.yaml  # specify your condition file made at step 1.
+    python -m compydetools condition.yaml  # specify your condition file made at step 1.
     ```
 
     or

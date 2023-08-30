@@ -62,9 +62,9 @@ metrics_type: !!seq
   - auc
   - tpr
   - fdr
-  - cutoff
   - f1score
   - kappa
+  - cutoff
 
 # specify your dict("method name in path of DE results": "method name in figures",)
 method_type: !!map

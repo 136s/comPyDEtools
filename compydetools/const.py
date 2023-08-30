@@ -61,9 +61,9 @@ class Metrics(Enum):
     auc = "AUC"
     tpr = "TPR"
     fdr = "True FDR"
-    cutoff = "Best threshold"
     f1score = "F1-score"
     kappa = "Cohen's kappa"
+    cutoff = "Best threshold"
 
 
 @unique
@@ -85,4 +85,12 @@ class Default:
     PDE: tuple[float] = (0.27, 5, 10, 30, 60)
     NREP: int = 50
     SEED: int = 330252033
-    PALETTE: list[str] = ["#ff4b00", "#fff100", "#03af7a", "#ed7ca2", "#005aff"]
+    PALETTE: list[str] = [
+        "#ff4b00",
+        "#fff100",
+        "#03af7a",
+        "#ed7ca2",
+        "#005aff",
+        "#f6aa00",
+        "#990099",
+    ]

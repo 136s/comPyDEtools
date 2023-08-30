@@ -9,25 +9,26 @@ from .core import Paper
 from .utils import run_commands
 
 
-def main():
-    # generate datasets
+def main(just_draw: bool = False):
     paper = Paper(nrep=CONDITION.nrep)
-    print("Generating datasets...", file=sys.stdout)
-    paper.generate_datasets()
-    # run analysis
-    print("Running DE analysis...", file=sys.stdout)
-    for anal_res in run_commands(CONDITION.analysis.cmds):
-        print(anal_res, file=sys.stdout)
-    # calc metrics
-    print("Calculating metrics of DE analysis...", file=sys.stdout)
-    paper.calc_metrics()
-    # save metrics values
-    COMP_RES_DIR.mkdir(exist_ok=True, parents=True)
-    paper.res2d.to_csv(
-        COMP_RES_DIR.joinpath("metrics_values.csv"),
-        lineterminator="\n",
-        encoding="utf-8-sig",
-    )
+    if not just_draw:
+        # generate datasets
+        print("Generating datasets...", file=sys.stdout)
+        paper.generate_datasets()
+        # run analysis
+        print("Running DE analysis...", file=sys.stdout)
+        for anal_res in run_commands(CONDITION.analysis.cmds):
+            print(anal_res, file=sys.stdout)
+        # calc metrics
+        print("Calculating metrics of DE analysis...", file=sys.stdout)
+        paper.calc_metrics()
+        # save metrics values
+        COMP_RES_DIR.mkdir(exist_ok=True, parents=True)
+        paper.res2d.to_csv(
+            COMP_RES_DIR.joinpath("metrics_values.csv"),
+            lineterminator="\n",
+            encoding="utf-8-sig",
+        )
     # draw figures
     print("Drawing figures...", file=sys.stdout)
     paper.make()
@@ -40,4 +41,4 @@ if __name__ == "__main__":
     if args.condition:
         for cnd in args.condition:
             set_condition(cnd)
-        main()
+        main(just_draw=args.draw)
