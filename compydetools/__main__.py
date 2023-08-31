@@ -1,15 +1,28 @@
 #!/usr/bin/env python
 
+from pathlib import Path
 import pickle
 import sys
 
 from . import parser
-from .condition import set_condition, CONDITION, COMP_RES_DIR
+from .condition import set_condition, CONDITION
 from .core import Paper
 from .utils import run_commands
 
 
 def main(just_generate: bool = False, just_draw: bool = False):
+    comp_res_dir = Path(CONDITION.dirs.compre_result)
+    concat_condition = "_".join(
+        [
+            "{" + "|".join([i.name for i in CONDITION.simul_data]) + "}",
+            "{" + "|".join([i.name for i in CONDITION.disp_type]) + "}",
+            "upFrac{" + "|".join([str(i) for i in CONDITION.frac_up]) + "}",
+            "{" + "|".join([str(i) for i in CONDITION.nsample]) + "}spc",
+            "{" + "|".join([i.name for i in CONDITION.outlier_mode]) + "}",
+            "{" + "|".join([str(i) for i in CONDITION.pde]) + "}DE",
+            f"nrep{CONDITION.nrep}",
+        ]
+    )
     paper = Paper(nrep=CONDITION.nrep)
     if not just_draw:
         # generate datasets
@@ -24,9 +37,9 @@ def main(just_generate: bool = False, just_draw: bool = False):
         print("Calculating metrics of DE analysis...", file=sys.stdout)
         paper.calc_metrics()
         # save metrics values
-        COMP_RES_DIR.mkdir(exist_ok=True, parents=True)
+        comp_res_dir.mkdir(exist_ok=True, parents=True)
         paper.res2d.to_csv(
-            COMP_RES_DIR.joinpath("metrics_values.csv"),
+            comp_res_dir.joinpath(concat_condition + ".csv"),
             lineterminator="\n",
             encoding="utf-8-sig",
         )
@@ -34,7 +47,7 @@ def main(just_generate: bool = False, just_draw: bool = False):
         # draw figures
         print("Drawing figures...", file=sys.stdout)
         paper.make()
-        with open(COMP_RES_DIR.joinpath("paper.pickle"), "wb") as f:
+        with open(comp_res_dir.joinpath(concat_condition + ".pickle"), "wb") as f:
             pickle.dump(paper, f)
 
 

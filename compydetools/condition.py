@@ -80,4 +80,4 @@ def set_condition(condition_path: StrPath) -> None:
                     overriding[cond_type] = [enum_cls[i] for i in overriding[cond_type]]
             OmegaConf.set_struct(overriding, True)
         CONDITION.merge_with(overriding)
-    print(f"CINDITION: {pformat(dict(CONDITION))}")
+    print(f"CINDITION: {pformat(dict(CONDITION), sort_dicts=False)}")
