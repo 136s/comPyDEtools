@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 
 from . import utils
-from .condition import CONDITION, DE_INPUT_DIR, COMP_RES_DIR
+from .condition import CONDITION
 from .const import Simul, Disp, Outlier, Metrics, Method, Default, MetricsInput
 from .generation import synthetic_data_simulation, GENE_ID_COLNAME
 
@@ -133,7 +133,9 @@ class Dataset:
             ]
         )
         self.dsid = f"{self.cond_str}_rep{self.seed}"
-        self.filepath = DE_INPUT_DIR.joinpath(self.cond_str, f"{self.dsid}.tsv")
+        self.filepath = Path(CONDITION.dirs.de_input).joinpath(
+            self.cond_str, f"{self.dsid}.tsv"
+        )
 
     def generate(self) -> None:
         if not hasattr(self, "counts"):
@@ -276,7 +278,7 @@ class Plot:
                 self.outlier_mode.name,
             ]
         )
-        self.filepath = COMP_RES_DIR.joinpath(f"{cond_str}.svg")
+        self.filepath = Path(CONDITION.dirs.compre_result).joinpath(f"{cond_str}.svg")
         self.filepath.parent.mkdir(exist_ok=True, parents=True)
 
     def draw(self, save: bool = True) -> None:
@@ -349,7 +351,7 @@ class Figure:
         cond_str = "_".join(
             [self.simul_data.name, self.disp_type.name, f"upFrac{self.frac_up}"]
         )
-        self.filepath = COMP_RES_DIR.joinpath(f"{cond_str}.svg")
+        self.filepath = Path(CONDITION.dirs.compre_result).joinpath(f"{cond_str}.svg")
         self.filepath.parent.mkdir(exist_ok=True, parents=True)
 
     def make(self, save: bool = True):

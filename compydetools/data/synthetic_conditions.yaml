@@ -10,61 +10,49 @@ analysis: !!map
   # colname of true deg regulation (up, dn or ns)
   de_true: !!str Description
   # colname of deg score (like p-value)
-  de_score: !!str fdr
+  de_score: !!str padj
   de_score_threshold: !!float 0.1
 
 # directory
 dirs: !!map
   de_input: input
-  de_output: output
   compre_result: result
 
-# "KIRC", "Bottomly", "mKdB", "mBdK"
+# KIRC, Bottomly, mKdB, mBdK
 simul_data: !!seq
   - KIRC
-  - Bottomly
-  - mKdB
-  - mBdK
 
-# "same", "different"
+# same, different
 disp_type: !!seq
   - same
-  - different
 
 # float 0-1
 frac_up: !!seq
   - 0.5
-  - 0.7
-  - 0.9
 
 # int 3-
 nsample: !!seq
   - 3
   - 10
 
-# "D", "R", "OS", "DL"
+# D, R, OS, DL
 outlier_mode: !!seq
   - D
   - R
   - OS
-  - DL
 
 # float 0-100
 pde: !!seq
-  - 0.27
   - 5
   - 10
   - 30
   - 60
 
-# "auc", "tpr", "fdr", "cutoff", "f1score", "kappa"
+# auc, tpr, fdr, f1score, kappa, cutoff
 metrics_type: !!seq
   - auc
   - tpr
   - fdr
-  - f1score
-  - kappa
-  - cutoff
 
 # specify your dict("method name in path of DE results": "method name in figures",)
 method_type: !!map
