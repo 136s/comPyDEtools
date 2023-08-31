@@ -133,7 +133,7 @@ class Dataset:
             ]
         )
         self.dsid = f"{self.cond_str}_rep{self.seed}"
-        self.filepath = Path(CONDITION.dirs.de_input).joinpath(
+        self.filepath = Path(CONDITION.dirs.dataset).joinpath(
             self.cond_str, f"{self.dsid}.tsv"
         )
 
@@ -278,7 +278,7 @@ class Plot:
                 self.outlier_mode.name,
             ]
         )
-        self.filepath = Path(CONDITION.dirs.compre_result).joinpath(f"{cond_str}.svg")
+        self.filepath = Path(CONDITION.dirs.result).joinpath(f"{cond_str}.svg")
         self.filepath.parent.mkdir(exist_ok=True, parents=True)
 
     def draw(self, save: bool = True) -> None:
@@ -351,7 +351,7 @@ class Figure:
         cond_str = "_".join(
             [self.simul_data.name, self.disp_type.name, f"upFrac{self.frac_up}"]
         )
-        self.filepath = Path(CONDITION.dirs.compre_result).joinpath(f"{cond_str}.svg")
+        self.filepath = Path(CONDITION.dirs.result).joinpath(f"{cond_str}.svg")
         self.filepath.parent.mkdir(exist_ok=True, parents=True)
 
     def make(self, save: bool = True):

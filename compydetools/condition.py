@@ -47,8 +47,8 @@ CONDITION = DictConfig(
             "de_score_threshold": 0.1,
         },
         "dirs": {
-            "de_input": "input",
-            "compre_result": "result",
+            "dataset": "input",
+            "result": "result",
         },
     }
 )

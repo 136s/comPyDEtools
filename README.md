@@ -22,7 +22,7 @@ pip install https://github.com/136s/comPyDEtools.git
 
 ## Usage
 
-1. Make a condition file like [compydetools/data/synthetic_conditions.yaml](https://github.com/136s/comPyDEtools/blob/main/compydetools/data/synthetic_conditions.yaml).
+1. Make a condition file like [compydetools/data/synthetic_conditions.yaml](./compydetools/data/synthetic_conditions.yaml).
 
 2. Run
 
@@ -63,7 +63,6 @@ pip install https://github.com/136s/comPyDEtools.git
         - file path: `{simul_data}_{disp_type}_upFrac{frac_up}_{nsample}spc_{outlier_mode}_{nde}DE/{simul_data}_{disp_type}_upFrac{frac_up}_{nsample}spc_{outlier_mode}_{nde}DE_rep{seed}.tsv`
         - newline character: LF
         - enxoding: UTF-8
-   - `output/`: DE analysis results by `analysis.cmds` in the condition file
    - `result/`: plots of performance comparison
 
 ## condition file (`condition.yaml`)
@@ -77,6 +76,8 @@ pip install https://github.com/136s/comPyDEtools.git
   - `de_score`: column name of deg score like p-value in each result files (defaults to "padj")
   - `de_score_threshold`: threshold of `de_score` (DEGs' `de_score` is lower than `de_score_threshold`)
 - `dirs`: directories of generated files
+  - `dataset`: generated simulated datasets
+  - `result`: plots of performance comparison, csv of metrics values and pickle of `Paper` instance
 - `simul_data`: KIRC, Bottomly, mKdB or mBdK
 - `disp_type`: same or differnt
 - `frac_up`: fraction upregulated in DEGs (float, $[0, 1]$)

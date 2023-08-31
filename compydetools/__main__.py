@@ -11,7 +11,7 @@ from .utils import run_commands
 
 
 def main(just_generate: bool = False, just_draw: bool = False):
-    comp_res_dir = Path(CONDITION.dirs.compre_result)
+    comp_res_dir = Path(CONDITION.dirs.result)
     concat_condition = "_".join(
         [
             "{" + "|".join([i.name for i in CONDITION.simul_data]) + "}",
