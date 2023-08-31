@@ -74,7 +74,7 @@ pip install https://github.com/136s/comPyDEtools.git
     - "{count_stem}" replaced by dataset path stem
     - "{method_type}" replaced by method_type
   - `de_true`: column name of deg regulation (up, dn or ns) in each result files (defaults to "Description")
-  - `de_score`: column name of deg score like p-value in each result files (defaults to "fdr")
+  - `de_score`: column name of deg score like p-value in each result files (defaults to "padj")
   - `de_score_threshold`: threshold of `de_score` (DEGs' `de_score` is lower than `de_score_threshold`)
 - `dirs`: directories of generated files
 - `simul_data`: KIRC, Bottomly, mKdB or mBdK
