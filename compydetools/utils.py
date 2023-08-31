@@ -164,6 +164,7 @@ def combine_figures(
     nrows = len(outlier_modes)
     fig, axs = plt.subplots(nrows, ncols, figsize=(w * ncols, h * nrows))
     fig.tight_layout(pad=0)
+    fig.subplots_adjust(wspace=0, hspace=0)
     # set skunk gid
     for x, col in enumerate(nsamples):
         for y, row in enumerate(outlier_modes):
