@@ -4,6 +4,7 @@
 useful functions and classes
 """
 
+from copy import deepcopy
 import subprocess
 from typing import Generator
 
@@ -137,16 +138,16 @@ def combine_figures(
     outlier_modes: list[Outlier],
     output: StrPath = None,
 ) -> str:
+    # get figure size
     w, h = 0, 0
     for plot in plots.values():
-        _w, _h = plot.get_size_inches()
-        w = max(w, _w)
-        h = max(h, _h)
+        w = max(w, plot.get_tightbbox().width)
+        h = max(h, plot.get_tightbbox().height)
     # prepare parent figure
     ncols = len(nsamples)
     nrows = len(outlier_modes)
     fig, axs = plt.subplots(nrows, ncols, figsize=(w * ncols, h * nrows))
-    fig.subplots_adjust(wspace=0, hspace=0)
+    fig.tight_layout(pad=0)
     # set skunk gid
     for x, col in enumerate(nsamples):
         for y, row in enumerate(outlier_modes):
@@ -161,7 +162,7 @@ def combine_figures(
             ax.axis("off")
             skunk.connect(ax, f"{col}spc_{row.name}")
     # insert mpl figures to parent figure
-    combined = skunk.insert(plots)
+    combined = skunk.insert(deepcopy(plots))
     if output:
         with open(output, "w") as f:
             f.write(combined)
