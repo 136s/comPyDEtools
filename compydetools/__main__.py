@@ -9,12 +9,13 @@ from .core import Paper
 from .utils import run_commands
 
 
-def main(just_draw: bool = False):
+def main(just_generate: bool = False, just_draw: bool = False):
     paper = Paper(nrep=CONDITION.nrep)
     if not just_draw:
         # generate datasets
         print("Generating datasets...", file=sys.stdout)
         paper.generate_datasets()
+    if not (just_draw or just_generate):
         # run analysis
         print("Running DE analysis...", file=sys.stdout)
         for anal_res in run_commands(CONDITION.analysis.cmds):
@@ -29,11 +30,12 @@ def main(just_draw: bool = False):
             lineterminator="\n",
             encoding="utf-8-sig",
         )
-    # draw figures
-    print("Drawing figures...", file=sys.stdout)
-    paper.make()
-    with open(COMP_RES_DIR.joinpath("paper.pickle"), "wb") as f:
-        pickle.dump(paper, f)
+    if not just_generate:
+        # draw figures
+        print("Drawing figures...", file=sys.stdout)
+        paper.make()
+        with open(COMP_RES_DIR.joinpath("paper.pickle"), "wb") as f:
+            pickle.dump(paper, f)
 
 
 if __name__ == "__main__":
@@ -41,4 +43,4 @@ if __name__ == "__main__":
     if args.condition:
         for cnd in args.condition:
             set_condition(cnd)
-        main(just_draw=args.draw)
+        main(just_generate=args.generate, just_draw=args.draw)

@@ -24,6 +24,12 @@ def parse_args() -> argparse.Namespace:
         help="file path of simulation conditions",
     )
     arg_parser.add_argument(
+        "-g",
+        "--generate",
+        action="store_true",
+        help="just generate simulated datasets",
+    )
+    arg_parser.add_argument(
         "-d",
         "--draw",
         action="store_true",
