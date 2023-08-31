@@ -5,6 +5,7 @@ useful functions and classes
 """
 
 from copy import deepcopy
+import platform
 import subprocess
 from typing import Generator
 
@@ -25,6 +26,13 @@ import skunk
 
 from .const import Default, Metrics, MetricsInput, Outlier, StrPath
 from .generation import GENE_DESCRIPTION_COLNAME, UP_DEG, DN_DEG
+
+
+FONT: dict[str, dict[str, list[str]]] = {
+    "Windows": ["Arial", "Nimbus Sans", "Helvetica"],
+    "Linux": ["Nimbus Sans", "Arial", "Helvetica"],
+    "Darwin": ["Helvetica", "Nimbus Sans", "Arial"],
+}
 
 
 def run_commands(cmds: list) -> Generator[str, None, None]:
@@ -91,6 +99,14 @@ def calc_metrics(
     return metrics_value
 
 
+def set_font() -> None:
+    plt.rcParams["svg.fonttype"] = "none"
+    default_family = "font." + plt.rcParams["font.family"][0]
+    plt.rcParams[default_family] = (
+        FONT[platform.system()] + plt.rcParams[default_family]
+    )
+
+
 def draw_plot(
     data: pd.DataFrame,
     plot_title: str | None = None,
@@ -99,8 +115,8 @@ def draw_plot(
     output: StrPath | None = None,
 ) -> sns.FacetGrid:
     aspect = len(data["method"].unique()) / 5
-    plt.rcParams["svg.fonttype"] = "none"
     sns.set_style("darkgrid", rc={"axes.facecolor": "ebebeb"})
+    set_font()
     g: sns.FacetGrid = sns.catplot(
         data,
         x="method",
