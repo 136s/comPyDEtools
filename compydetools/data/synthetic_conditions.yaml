@@ -1,0 +1,62 @@
+%YAML 1.2
+---
+# analysis command and result
+analysis: !!map
+  cmds: !!seq
+    - !!str some commands to analysis by line
+  # {count_stem} replaced by dataset stem
+  # {method_type} replaced by method_type
+  res: !!str regex/of/path/to/result/files
+  # colname of true deg regulation (up, dn or ns)
+  de_true: !!str Description
+  # colname of deg score (like p-value)
+  de_score: !!str padj
+  de_score_threshold: !!float 0.1
+
+# directory
+dirs: !!map
+  dataset: input
+  result: result
+
+# KIRC, Bottomly, mKdB, mBdK
+simul_data: !!seq
+  - KIRC
+
+# same, different
+disp_type: !!seq
+  - same
+
+# float 0-1
+frac_up: !!seq
+  - 0.5
+
+# int 3-
+nsample: !!seq
+  - 3
+  - 10
+
+# D, R, OS, DL
+outlier_mode: !!seq
+  - D
+  - R
+  - OS
+
+# float 0-100
+pde: !!seq
+  - 5
+  - 10
+  - 30
+  - 60
+
+# auc, tpr, fdr, f1score, kappa, cutoff
+metrics_type: !!seq
+  - auc
+  - tpr
+  - fdr
+
+# specify your dict("method name in path of DE results": "method name in figures",)
+method_type: !!map
+  deseq2: Deseq2
+
+# int 3-
+nrep: !!int 50
