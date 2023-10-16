@@ -10,8 +10,8 @@ comPyDEtools can ...
 
 and can't ...
 
-- SEQC benchmark (like in [Fig 1 in Baik 2020](https://doi.org/10.1371/journal.pone.0232271.g001))
-- False positive count comparison (like in [Fig 3 in Baik 2020](https://doi.org/10.1371/journal.pone.0232271.g003))
+- SEQC benchmark (like [Fig 1 in Baik 2020](https://doi.org/10.1371/journal.pone.0232271.g001))
+- False positive count comparison (like [Fig 3 in Baik 2020](https://doi.org/10.1371/journal.pone.0232271.g003))
 - etc
 
 ## Installation
@@ -91,6 +91,49 @@ pip install https://github.com/136s/comPyDEtools.git
 - `nrep`: number of simulation repetition under one condition (int, $3<=$)
 
 ## Development
+
+### Class relationships
+
+```mermaid
+erDiagram
+  Paper |o--|{ Figure : "has a list of"
+  Figure |o--|{ Plot : "has a list of"
+  Plot ||--|{ DataPool : "has a list of"
+  DataPool ||--|{ Dataset : "has a list of"
+  DataPool ||--|{ Result : "has a list of"
+  Dataset ||--|| Result : ""
+
+  Paper {
+    int nrep "number of repetition in a data pool (3<=)"
+    int seed "global random seed"
+    list[Figure] figures
+  }
+  Figure {
+    Simul simul_data PK "simulation data (KIRC, Bottomly, mKdB or mBdK)"
+    Disp disp_type PK "dispersion type (same or differnt)"
+    float frac_up PK "fraction upregulated ([0, 1])"
+    list[Plot] plots
+  }
+  Plot {
+    int nsample PK "number of samples per condition (3<=)"
+    Outlier outlier_mode PK "outlier mode (D, R, OS, or DL)"
+    list[DataPool] datapools
+  }
+  DataPool {
+    float pde PK "percent of DE in all genes ((0, 100])"
+    list[Dataset] datasets
+    list[DataPool] datapools
+  }
+  Dataset {
+    int seed PK "random seed for each dataset generated from global seed"
+    DataFrame counts "simulated count matrix"
+  }
+  Result {
+    int seed PK "random seed for each dataset"
+    list[Method] method_types "a list of DE analysis methods to be compared"
+    list[Metrics] metrics_types "a list of metrics to comprere DE analysis methods"
+  }
+```
 
 ### `core` module
 
